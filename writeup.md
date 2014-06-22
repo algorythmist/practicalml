@@ -129,7 +129,7 @@ The main conclusion of this brief exercise is that Random Forests can be quite p
 All the R code for this project is checked into the Git repository, as well as the data used.
 
 * preprocess.R - The methods used to preprocess the data
-* trainint.R - The methods used to train and test
+* training.R - The methods used to train and test
 * Project.R - Some of the steps performed to produce this writeup
 
 
