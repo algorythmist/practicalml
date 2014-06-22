@@ -1,3 +1,5 @@
+
+
 Workout Classification
 ========================================================
 
@@ -90,20 +92,45 @@ The following plot illustrates that once you go over 100 trees, accuracy stays p
 
 ![image for trees](rf.png)
 
-# Out of Sample Error Estimate
+## Out of Sample Error Estimate
 
-http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm
 
-The out-of-bag (oob) error estimate
+An advantage of random forests is that there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally as part of training. More details on how this happens can be found at http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm
 
-In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally, during the run, as follows:
+Nevertheless, it is easy to experimentally verify this claim. Printing a model that we trained using the random training set we obtain:
 
-Each tree is constructed using a different bootstrap sample from the original data. About one-third of the cases are left out of the bootstrap sample and not used in the construction of the kth tree.
 
-Put each case left out in the construction of the kth tree down the kth tree to get a classification. In this way, a test set classification is obtained for each case in about one-third of the trees. At the end of the run, take j to be the class that got most of the votes every time case n was oob. The proportion of times that j is not equal to the true class of n averaged over all cases is the oob error estimate. This has proven to be unbiased in many tests. 
+```r
+inTrain = createDataPartition(cleanData$classe, p = .7)[[1]]
+trainSet = cleanData[ inTrain,]
+model = randomForest(classe~.,data=trainSet,ntree=200)
+```
+        OOB estimate of  error rate: 0.56%
+
+Note that the OOB (Out Of Box) estimate is 0.56% which means 0.0056.
+
+Let us compute the error rate on the test set:
+
+
+```r
+testSet = cleanData[-inTrain,]
+prediction <- predict(model, testSet)
+error = 1 - postResample(prediction, testSet$classe)[[1]]
+```
+
+Yields an error of 0.004587935, which is in the same order of magnitude.
 
 ## Conclusion
 
+The main conclusion of this brief exercise is that Random Forests can be quite powerful. With limitted understanding of the data and very basic preprocessing, a random forest achieved a very high prediction accuracy.
+
 ## R code
+
+All the R code for this project is checked into the Git repository, as well as the data used.
+
+* preprocess.R - The methods used to preprocess the data
+* trainint.R - The methods used to train and test
+* Project.R - Some of the steps performed to produce this writeup
+
 
 

@@ -1,5 +1,5 @@
 require(caret)
-source("preprocess.R")
+require(randomForest)
 
 getCleanData <- function(dataSet) {
   classe = dataSet$classe
@@ -25,11 +25,3 @@ getAccuracy <- function(t) {
   return (trainAndTest(cleanData,t)[[1]])
 }
 
-trees = c(1,10,25,50,100,150,200,250,300,400,500)
-a = lapply(trees,getAccuracy)
-
-prediction <- predict(model, testSet)
-postResample(prediction, testSet$classe)
-
-#Accuracy     Kappa 
-#0.9636667 0.9539567 
